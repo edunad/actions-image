@@ -1,0 +1,21 @@
+{
+  "name": "post-screenshot",
+  "version": "0.0.3",
+  "description": "Post a comment with an image on the pull request",
+  "main": "index.js",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edunad/action-post-screenshot/issues"
+  },
+  "repository": "https://github.com/edunad/action-post-screenshot",
+  "author": {
+    "name": "edunad & d3lta"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "@actions/glob": "^0.1.0",
+    "form-data": "^3.0.0",
+    "node-fetch": "^2.6.1"
+  }
+}
