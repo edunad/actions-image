@@ -1,5 +1,8 @@
 name: 'Post Screenshot'
 description: 'Post a screenshot to comment section on the pull request'
+branding:
+  icon: 'image'  
+  color: 'black'
 inputs:
   GITHUB_TOKEN:
     description: 'Github token, can be secrets.GITHUB_TOKEN'
