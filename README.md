@@ -2,7 +2,7 @@
 Post a image on the pull request. Usefull for screenshots of failed E2E tests.
 Also supports tagging code files.
 
-![](https://i.rawr.dev/Dp18k0hFWz.png)
+![](https://i.rawr.dev/y8qLStSmHo.png)
 
 ## Inputs
 ### `GITHUB_TOKEN` - **REQUIRED**
