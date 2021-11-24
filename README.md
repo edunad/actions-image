@@ -26,7 +26,7 @@ Also supports tagging code files.
 ```
 - name: Upload failed tests
   if: ${{ failure() }}
-  uses: edunad/action-image@v1.0.0
+  uses: edunad/actions-image@v1.0.0
   with:
       path: './failed_tests/**/*.png'
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
