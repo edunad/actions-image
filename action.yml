@@ -1,5 +1,5 @@
-name: 'Post Screenshot'
-description: 'Post a screenshot to comment section on the pull request'
+name: 'Post Image'
+description: 'Posts a image on the comment section in a pull request'
 branding:
     icon: 'image'
     color: 'black'

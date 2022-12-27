@@ -1,14 +1,14 @@
 {
-    "name": "post-screenshot",
-    "version": "0.0.3",
+    "name": "@edunad/actions-image",
+    "version": "1.0.0",
     "description": "Post a comment with an image on the pull request",
     "main": "index.mjs",
     "module": "true",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/edunad/action-post-screenshot/issues"
+        "url": "https://github.com/edunad/actions-image/issues"
     },
-    "repository": "https://github.com/edunad/action-post-screenshot",
+    "repository": "https://github.com/edunad/actions-image",
     "author": {
         "name": "edunad & d3lta"
     },
