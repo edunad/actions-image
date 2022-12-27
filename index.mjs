@@ -20,7 +20,7 @@ async function run() {
         const IMG_ENDPOINT = core.getInput('uploadHost') || 'https://0x0.st/';
         const annotationTag = core.getInput('annotationTag') || '[--]';
 
-        const github = getOctokit(token);
+        const octokit = getOctokit(token);
         const globber = await glob.create(pathGlob, { followSymbolicLinks: false });
         const files = await globber.glob();
 
@@ -34,13 +34,19 @@ async function run() {
 
                     readFile(file, (err, buffer) => {
                         if (err) return reject(`Invalid image {${file}}`);
-                        form.append('file', buffer, {
+
+                        /*form.append('file', buffer, {
                             contentType: `image/${extname(file)}`,
                             name: name,
                             filename: name,
+                        });*/
+
+                        return resolve({
+                            file: file,
+                            url: `data:image/png;base64,${buffer.toString('base64')}`,
                         });
 
-                        fetch(IMG_ENDPOINT, {
+                        /*fetch(IMG_ENDPOINT, {
                             method: 'POST',
                             body: form,
                         })
@@ -51,7 +57,7 @@ async function run() {
                                     url: url.trim(),
                                 }),
                             )
-                            .catch(() => reject(`Failed to upload {${file}}`));
+                            .catch(() => reject(`Failed to upload {${file}}`));*/
                     });
                 }),
         );
@@ -110,7 +116,7 @@ async function run() {
             });
         });
 
-        github.checks
+        octokit.rest.checks
             .create({
                 head_sha: context.payload.pull_request.head.sha,
                 name: '@edunad/actions-image',
