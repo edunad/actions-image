@@ -1,29 +1,29 @@
-name: "Post Screenshot"
-description: "Post a screenshot to comment section on the pull request"
+name: 'Post Screenshot'
+description: 'Post a screenshot to comment section on the pull request'
 branding:
-  icon: "image"
-  color: "black"
+    icon: 'image'
+    color: 'black'
 inputs:
-  GITHUB_TOKEN:
-    description: "Github token, can be secrets.GITHUB_TOKEN"
-    required: true
-    default: ""
-  path:
-    description: "Image path glob (Ex: **/*.png)"
-    required: true
-    default: ""
-  title:
-    description: "Comment title"
-    required: false
-    default: ""
-  uploadHost:
-    description: "Upload host (by default: https://0x0.st/)"
-    required: false
-    default: "https://0x0.st/"
-  annotationTag:
-    description: "The tag to look for in the provided images base64 name (ex: tests/mytest.spec.js[--]80:40.png)"
-    required: false
-    default: "[--]"
+    GITHUB_TOKEN:
+        description: 'Github token, can be secrets.GITHUB_TOKEN'
+        required: true
+        default: ''
+    path:
+        description: 'Image path glob (Ex: **/*.png)'
+        required: true
+        default: ''
+    title:
+        description: 'Comment title'
+        required: false
+        default: ''
+    uploadHost:
+        description: 'Upload host (by default: https://0x0.st/)'
+        required: false
+        default: 'https://0x0.st/'
+    annotationTag:
+        description: 'The tag to look for in the provided images base64 name (ex: tests/mytest.spec.js[--]80:40.png)'
+        required: false
+        default: '[--]'
 runs:
-  using: "node16"
-  main: "./index.js"
+    using: 'node16'
+    main: './index.mjs'
