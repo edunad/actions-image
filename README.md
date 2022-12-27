@@ -3,7 +3,7 @@
 Post a image on the pull request. Usefull for screenshots of failed E2E tests.
 Also supports tagging code files.
 
-![](https://i.rawr.dev/y8qLStSmHo.png)
+![](https://i.rawr.dev/o2a05fQ8QM.png)
 
 ## Requirements
 
@@ -32,7 +32,7 @@ permissions:
 
 ### `uploadHost` - _OPTIONAL_
 
-> Where to upload the pictures to `(Ex: https://0x0.st/)`, uses form POST to upload.
+> Where to upload the pictures to `(Default: https://litterbox.catbox.moe <3)`, uses form POST to upload.
 
 ### `annotationTag` - _OPTIONAL_
 
