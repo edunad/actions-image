@@ -18,6 +18,10 @@ permissions:
 
 ## Inputs
 
+### `GITHUB_TOKEN` - **REQUIRED**
+
+> The github token to perform api actions, can be set to `${{GITHUB_TOKEN}}` or a custom one.
+
 ### `path` - **REQUIRED**
 
 > The path to the image files, it supports glob. `(Ex: ./my-image/**/*.png)`

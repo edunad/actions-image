@@ -14,13 +14,14 @@ async function run() {
     }
 
     try {
+        const token = core.getInput('GITHUB_TOKEN', { required: true });
         const pathGlob = core.getInput('path', { required: true });
         const title = core.getInput('title');
         const IMG_ENDPOINT = core.getInput('uploadHost') || 'https://litterbox.catbox.moe/resources/internals/api.php';
         const annotationTag = core.getInput('annotationTag') || '[--]';
         const annotationLevel = core.getInput('annotationLevel') || 'notice';
 
-        const octokit = getOctokit(process.env.GITHUB_TOKEN);
+        const octokit = getOctokit(token);
         const globber = await glob.create(pathGlob, { followSymbolicLinks: false });
         const files = await globber.glob();
 
