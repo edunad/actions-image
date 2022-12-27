@@ -4,10 +4,6 @@ branding:
     icon: 'image'
     color: 'black'
 inputs:
-    GITHUB_TOKEN:
-        description: 'Github token, can be secrets.GITHUB_TOKEN'
-        required: true
-        default: ''
     path:
         description: 'Image path glob (Ex: **/*.png)'
         required: true
@@ -24,6 +20,10 @@ inputs:
         description: 'The tag to look for in the provided images base64 name (ex: tests/mytest.spec.js[--]80:40.png)'
         required: false
         default: '[--]'
+    annotationLevel:
+        description: 'The annotation level (Supported values: notice, warning, failure)'
+        required: false
+        default: 'notice'
 runs:
     using: 'node16'
     main: './index.mjs'

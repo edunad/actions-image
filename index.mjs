@@ -14,13 +14,13 @@ async function run() {
     }
 
     try {
-        const token = core.getInput('GITHUB_TOKEN', { required: true });
         const pathGlob = core.getInput('path', { required: true });
         const title = core.getInput('title');
-        const IMG_ENDPOINT = core.getInput('uploadHost') || 'https://0x0.st/';
+        const IMG_ENDPOINT = core.getInput('uploadHost') || 'https://litterbox.catbox.moe/resources/internals/api.php';
         const annotationTag = core.getInput('annotationTag') || '[--]';
+        const annotationLevel = core.getInput('annotationLevel') || 'notice';
 
-        const octokit = getOctokit(token);
+        const octokit = getOctokit(process.env.GITHUB_TOKEN);
         const globber = await glob.create(pathGlob, { followSymbolicLinks: false });
         const files = await globber.glob();
 
@@ -35,18 +35,17 @@ async function run() {
                     readFile(file, (err, buffer) => {
                         if (err) return reject(`Invalid image {${file}}`);
 
-                        /*form.append('file', buffer, {
+                        form.append('file', buffer, {
                             contentType: `image/${extname(file)}`,
                             name: name,
                             filename: name,
-                        });*/
 
-                        return resolve({
-                            file: file,
-                            url: `data:image/png;base64,${buffer.toString('base64')}`,
+                            reqtype: 'fileupload',
+                            time: '24h',
+                            fileToUpload: name,
                         });
 
-                        /*fetch(IMG_ENDPOINT, {
+                        fetch(IMG_ENDPOINT, {
                             method: 'POST',
                             body: form,
                         })
@@ -57,7 +56,7 @@ async function run() {
                                     url: url.trim(),
                                 }),
                             )
-                            .catch(() => reject(`Failed to upload {${file}}`));*/
+                            .catch(() => reject(`Failed to upload {${file}}`));
                     });
                 }),
         );
@@ -94,7 +93,7 @@ async function run() {
                             path: filePath,
                             end_line: parseInt(line),
                             start_line: parseInt(line),
-                            annotation_level: 'notice',
+                            annotation_level: annotationLevel,
                             message: fileUrl,
                         },
                     });
