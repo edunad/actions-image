@@ -1,0 +1,28 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.insertFinalNewline": true,
+        "trailing-spaces.trimOnSave": true,
+        "editor.formatOnSave": true,
+        "files.eol": "\n",
+        "terminal.integrated.cwd": "./",
+        "eslint.workingDirectories": ["./"],
+        "svg.preview.background": "transparent",
+        "typescript.tsdk": "node_modules\\typescript\\lib",
+        "typescript.tsserver.experimental.enableProjectDiagnostics": true
+    },
+    "extensions": {
+        "recommendations": [
+            "dbaeumer.vscode-eslint",
+            "file-icons.file-icons",
+            "esbenp.prettier-vscode",
+            "sibiraj-s.vscode-scss-formatter",
+            "pflannery.vscode-versionlens",
+            "naumovs.color-highlight"
+        ]
+    }
+}
