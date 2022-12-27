@@ -36,20 +36,25 @@ permissions:
 
 ### `annotationTag` - _OPTIONAL_
 
-> The tag that is used to split the base64 image info `(ex: tests/mytest.spec.js[--]80:40.png)`
+> The tag that is used to split the base64 image info `(Default: [==] Ex: tests/mytest.spec.js[--]80:40.png)`
+
+### `annotationLevel` - _OPTIONAL_
+
+> The annotation level | Supported values: **notice, warning, failure** `(Default: notice)`
 
 ---
 
 ## Example usage
 
-```
+```yaml
 - name: Upload failed tests
   if: ${{ failure() }}
-  uses: edunad/actions-image@v1.0.1
+  uses: edunad/actions-image@v2.0.0
   with:
       path: './failed_tests/**/*.png'
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       title: 'Failed E2E tests 🙀'
+      annotationLevel: 'failure'
 ```
 
 ---

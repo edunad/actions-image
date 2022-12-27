@@ -1,6 +1,6 @@
 {
     "name": "@edunad/actions-image",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Post a comment with an image on the pull request",
     "main": "index.mjs",
     "module": "true",

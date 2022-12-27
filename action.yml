@@ -1,5 +1,5 @@
-name: 'Post Image'
-description: 'Posts a image on the comment section in a pull request'
+name: 'Action Image'
+description: 'Posts a image on actions (on the given line if provided), useful for CI/CD & End2End screenshots'
 branding:
     icon: 'image'
     color: 'black'
@@ -17,15 +17,15 @@ inputs:
         required: false
         default: ''
     uploadHost:
-        description: 'Upload host (by default: https://0x0.st/)'
+        description: 'Upload host (Default: https://litterbox.catbox.moe)'
         required: false
-        default: 'https://0x0.st/'
+        default: 'https://litterbox.catbox.moe'
     annotationTag:
         description: 'The tag to look for in the provided images base64 name (ex: tests/mytest.spec.js[--]80:40.png)'
         required: false
         default: '[--]'
     annotationLevel:
-        description: 'The annotation level (Supported values: notice, warning, failure)'
+        description: 'The annotation level (Default: notice | Supported values: notice, warning, failure)'
         required: false
         default: 'notice'
 runs:
