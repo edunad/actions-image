@@ -8,6 +8,8 @@ import glob from '@actions/glob';
 import core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 
+const defaultHost = 'https://litterbox.catbox.moe/resources/internals/api.php';
+
 async function run() {
     if (!context.payload.pull_request) {
         return core.setFailed('Failed to run action, only ment for pull requests!');
@@ -17,7 +19,7 @@ async function run() {
         const token = core.getInput('GITHUB_TOKEN', { required: true });
         const pathGlob = core.getInput('path', { required: true });
         const title = core.getInput('title');
-        const IMG_ENDPOINT = core.getInput('uploadHost') || 'https://litterbox.catbox.moe/resources/internals/api.php';
+        const IMG_ENDPOINT = core.getInput('uploadHost') || defaultHost;
         const annotationTag = core.getInput('annotationTag') || '[--]';
         const annotationLevel = core.getInput('annotationLevel') || 'notice';
 
@@ -36,14 +38,20 @@ async function run() {
                     readFile(file, (err, buffer) => {
                         if (err) return reject(`Invalid image {${file}}`);
 
+                        let apiData = {};
+                        if (IMG_ENDPOINT === defaultHost) {
+                            apiData = {
+                                reqtype: 'fileupload',
+                                time: '24h',
+                                fileToUpload: name,
+                            };
+                        }
+
                         form.append('file', buffer, {
                             contentType: `image/${extname(file)}`,
                             name: name,
                             filename: name,
-
-                            reqtype: 'fileupload',
-                            time: '24h',
-                            fileToUpload: name,
+                            ...apiData,
                         });
 
                         fetch(IMG_ENDPOINT, {
@@ -61,6 +69,8 @@ async function run() {
                     });
                 }),
         );
+
+        if (!urlPromises || urlPromises.length <= 0) return core.setFailed(`Failed to upload files to the provider`);
 
         const urls = await Promise.all(urlPromises).catch(() => {
             core.setFailed(`Failed to upload images`);

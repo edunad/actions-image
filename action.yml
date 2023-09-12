@@ -17,9 +17,9 @@ inputs:
         required: false
         default: ''
     uploadHost:
-        description: 'Upload host (Default: https://litterbox.catbox.moe)'
+        description: 'Upload host (Default: https://litterbox.catbox.moe/resources/internals/api.php)'
         required: false
-        default: 'https://litterbox.catbox.moe'
+        default: 'https://litterbox.catbox.moe/resources/internals/api.php'
     annotationTag:
         description: 'The tag to look for in the provided images base64 name (ex: tests/mytest.spec.js[--]80:40.png)'
         required: false
