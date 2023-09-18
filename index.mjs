@@ -80,8 +80,14 @@ async function run() {
             (urlData) =>
                 new Promise((resolve, reject) => {
                     const cleanFile = parse(urlData.file).name;
-                    const base64Decode = Buffer.from(cleanFile, 'base64').toString('ascii');
-                    if (base64Decode.indexOf(annotationTag) === -1) return resolve({ imageUrl: urlData.url });
+                    const base64Matcher = new RegExp('/^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/');
+
+                    if (!base64Matcher.test(cleanFile)) {
+                        return resolve({ imageUrl: urlData.url });
+                    } else {
+                        const base64Decode = Buffer.from(cleanFile, 'base64').toString('ascii');
+                        if (base64Decode.indexOf(annotationTag) === -1) return resolve({ imageUrl: urlData.url });
+                    }
 
                     const fileData = base64Decode.split(annotationTag);
                     if (!fileData || fileData.length < 1)
