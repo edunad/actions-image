@@ -32,7 +32,7 @@ permissions:
 
 ### `uploadHost` - _OPTIONAL_
 
-> Where to upload the pictures to `(Default: https://litterbox.catbox.moe <3)`, uses form POST to upload.
+> Where to upload the pictures to `(Default: https://litterbox.catbox.moe/resources/internals/api.php , please do not upload sensitive information, this is public access)`, uses form POST to upload.
 
 ### `annotationTag` - _OPTIONAL_
 
