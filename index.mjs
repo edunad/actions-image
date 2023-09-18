@@ -76,13 +76,18 @@ async function run() {
             core.setFailed(`Failed to upload images`);
         });
 
+        const validateBase64 = function (encoded1) {
+            var decoded1 = Buffer.from(encoded1, 'base64').toString('utf8');
+            var encoded2 = Buffer.from(decoded1, 'binary').toString('base64');
+            return encoded1 == encoded2;
+        };
+
         const promises = urls.map(
             (urlData) =>
                 new Promise((resolve, reject) => {
                     const cleanFile = parse(urlData.file).name;
-                    const base64Matcher = new RegExp('/^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/');
 
-                    if (!base64Matcher.test(cleanFile)) {
+                    if (!validateBase64(cleanFile)) {
                         return resolve({ imageUrl: urlData.url });
                     } else {
                         const base64Decode = Buffer.from(cleanFile, 'base64').toString('ascii');
