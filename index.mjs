@@ -7,7 +7,7 @@ import FormData from 'form-data';
 import glob from '@actions/glob';
 import core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
-import * as Catbox from 'catbox.moe';
+import Catbox from 'catbox.moe';
 
 const defaultHost = 'https://litterbox.catbox.moe/resources/internals/api.php';
 
