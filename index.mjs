@@ -105,13 +105,12 @@ async function run() {
             (urlData) =>
                 new Promise((resolve, reject) => {
                     const cleanFile = parse(urlData.file).name;
-
                     if (!validateBase64(cleanFile)) {
                         return resolve({ imageUrl: urlData.url });
-                    } else {
-                        const base64Decode = Buffer.from(cleanFile, 'base64').toString('ascii');
-                        if (base64Decode.indexOf(annotationTag) === -1) return resolve({ imageUrl: urlData.url });
                     }
+
+                    const base64Decode = Buffer.from(cleanFile, 'base64').toString('ascii');
+                    if (base64Decode.indexOf(annotationTag) === -1) return resolve({ imageUrl: urlData.url });
 
                     const fileData = base64Decode.split(annotationTag);
                     if (!fileData || fileData.length < 1)
