@@ -7,7 +7,7 @@ import FormData from 'form-data';
 import glob from '@actions/glob';
 import core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
-import { Litterbox } from 'catbox.moe';
+import * as Catbox from 'catbox.moe';
 
 const defaultHost = 'https://litterbox.catbox.moe/resources/internals/api.php';
 
@@ -30,7 +30,7 @@ async function run() {
 
         if (!files || files.length <= 0) return core.setFailed(`Failed to find files on path {${pathGlob}}`);
 
-        const litter = new Litterbox();
+        const litter = new Catbox.Litterbox();
         const urlPromises = files.map(
             (file) =>
                 new Promise((resolve, reject) => {
