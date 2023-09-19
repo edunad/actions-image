@@ -15,7 +15,7 @@ async function run() {
     if (!context.payload.pull_request) {
         return core.setFailed('Failed to run action, only ment for pull requests!');
     }
-
+    3;
     try {
         const token = core.getInput('GITHUB_TOKEN', { required: true });
         const pathGlob = core.getInput('path', { required: true });
@@ -25,15 +25,16 @@ async function run() {
         const annotationLevel = core.getInput('annotationLevel') || 'notice';
 
         const octokit = getOctokit(token);
-        const globber = await glob.create(pathGlob, { followSymbolicLinks: false });
+        const globber = await glob.create(pathGlob, { followSymbolicLinks: false, matchDirectories: false });
         const files = await globber.glob();
 
         if (!files || files.length <= 0) return core.setFailed(`Failed to find files on path {${pathGlob}}`);
 
+        // UPLOAD FILES --------------------------
         const litter = new Catbox.Litterbox();
         const urlPromises = files.map(
             (file) =>
-                new Promise((resolve, reject) => {
+                new Promise(async (resolve, reject) => {
                     const name = basename(file);
                     console.log(`Uploading file '${name}'`);
 
@@ -41,6 +42,7 @@ async function run() {
                         litter
                             .upload(file, '24h')
                             .then((url) => {
+                                console.log(`Uploaded to ${url}`);
                                 resolve({
                                     file: file,
                                     url: url.trim(),
@@ -85,16 +87,14 @@ async function run() {
                 }),
         );
 
-        if (!urlPromises || urlPromises.length <= 0) return core.setFailed(`Failed to upload files to the provider`);
-
-        let failed = false;
         const urls = await Promise.all(urlPromises).catch((err) => {
             core.setFailed(err);
-            failed = true;
         });
 
-        if (failed) return;
+        if (!urls || urls.length <= 0) return core.setFailed(`Failed to upload files to the provider`);
+        // --------------------------
 
+        // GENERATE ANNOTATIONS --------------------------
         const validateBase64 = function (encoded1) {
             var decoded1 = Buffer.from(encoded1, 'base64').toString('utf8');
             var encoded2 = Buffer.from(decoded1, 'binary').toString('base64');
@@ -155,7 +155,9 @@ async function run() {
                 image_url: anno.imageUrl,
             });
         });
+        // --------------------------
 
+        // UPLOAD ANNOTATIONS --------------------------
         octokit.rest.checks
             .create({
                 head_sha: context.payload.pull_request.head.sha,
@@ -178,6 +180,7 @@ async function run() {
             .catch((err) => {
                 core.setFailed(err.message);
             });
+        // --------------------------
     } catch (err) {
         core.setFailed(err.message);
     }
