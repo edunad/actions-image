@@ -42,26 +42,35 @@ async function run() {
                         let apiData = {};
                         if (IMG_ENDPOINT === defaultHost) {
                             console.log(`Using default host..`);
+
                             apiData = {
+                                contentType: `image/${extname(file)}`,
+                                name: name,
+                                filename: name,
                                 reqtype: 'fileupload',
                                 time: '24h',
                                 fileToUpload: name,
                             };
+                        } else {
+                            apiData = {
+                                contentType: `image/${extname(file)}`,
+                                name: name,
+                                filename: name,
+                            };
                         }
 
-                        form.append('file', buffer, {
-                            contentType: `image/${extname(file)}`,
-                            name: name,
-                            filename: name,
-                            ...apiData,
-                        });
-
+                        form.append('file', buffer, apiData);
                         fetch(IMG_ENDPOINT, {
                             method: 'POST',
+                            headers: { 'Content-Type': 'multipart/form-data' },
                             body: form,
                         })
                             .then((res) => res.text())
                             .then((url) => {
+                                if (!url.startsWith('http')) {
+                                    return reject(`Failed to upload {${file}}`);
+                                }
+
                                 console.log(`Uploaded to ${url}`);
                                 resolve({
                                     file: file,
