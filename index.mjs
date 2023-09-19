@@ -120,7 +120,9 @@ async function run() {
                     let filePath = fileData[0].replace(/\\/g, '/').replace('./', '');
                     if (filePath.startsWith('/')) filePath = filePath.substring(1);
 
-                    const lineCol = fileData[1].split('__'); // Base64 encodes : to __, we only want ot grab the line for now
+                    console.log(fileData);
+
+                    const lineCol = fileData[1].split(':');
                     if (!lineCol || lineCol.length !== 2) return reject('Invalid annotation file name');
 
                     const line = lineCol[0];
