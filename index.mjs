@@ -35,11 +35,13 @@ async function run() {
                     const form = new FormData();
                     const name = basename(file);
 
+                    console.log(`Uploading file '${name}'`);
                     readFile(file, (err, buffer) => {
                         if (err) return reject(`Invalid image {${file}}`);
 
                         let apiData = {};
                         if (IMG_ENDPOINT === defaultHost) {
+                            console.log(`Using default host..`);
                             apiData = {
                                 reqtype: 'fileupload',
                                 time: '24h',
@@ -59,12 +61,13 @@ async function run() {
                             body: form,
                         })
                             .then((res) => res.text())
-                            .then((url) =>
+                            .then((url) => {
+                                console.log(`Uploaded to ${url}`);
                                 resolve({
                                     file: file,
                                     url: url.trim(),
-                                }),
-                            )
+                                });
+                            })
                             .catch(() => reject(`Failed to upload {${file}}`));
                     });
                 }),
@@ -72,9 +75,13 @@ async function run() {
 
         if (!urlPromises || urlPromises.length <= 0) return core.setFailed(`Failed to upload files to the provider`);
 
-        const urls = await Promise.all(urlPromises).catch(() => {
-            core.setFailed(`Failed to upload images`);
+        let failed = false;
+        const urls = await Promise.all(urlPromises).catch((err) => {
+            core.setFailed(err);
+            failed = true;
         });
+
+        if (failed) return;
 
         const validateBase64 = function (encoded1) {
             var decoded1 = Buffer.from(encoded1, 'base64').toString('utf8');
