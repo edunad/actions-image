@@ -7,6 +7,7 @@ import FormData from 'form-data';
 import glob from '@actions/glob';
 import core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
+import { Litterbox } from 'catbox.moe';
 
 const defaultHost = 'https://litterbox.catbox.moe/resources/internals/api.php';
 
@@ -29,56 +30,58 @@ async function run() {
 
         if (!files || files.length <= 0) return core.setFailed(`Failed to find files on path {${pathGlob}}`);
 
+        const litter = new Litterbox();
         const urlPromises = files.map(
             (file) =>
                 new Promise((resolve, reject) => {
-                    const form = new FormData();
                     const name = basename(file);
-
                     console.log(`Uploading file '${name}'`);
-                    readFile(file, (err, buffer) => {
-                        if (err) return reject(`Invalid image {${file}}`);
 
-                        let apiData = {};
-                        if (IMG_ENDPOINT === defaultHost) {
-                            console.log(`Using default host..`);
-
-                            apiData = {
-                                contentType: `image/${extname(file)}`,
-                                name: name,
-                                filename: name,
-                                reqtype: 'fileupload',
-                                time: '24h',
-                                fileToUpload: name,
-                            };
-                        } else {
-                            apiData = {
-                                contentType: `image/${extname(file)}`,
-                                name: name,
-                                filename: name,
-                            };
-                        }
-
-                        form.append('file', buffer, apiData);
-                        fetch(IMG_ENDPOINT, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'multipart/form-data' },
-                            body: form,
-                        })
-                            .then((res) => res.text())
+                    if (IMG_ENDPOINT === defaultHost) {
+                        litter
+                            .upload(file, '24h')
                             .then((url) => {
-                                if (!url.startsWith('http')) {
-                                    return reject(`Failed to upload {${file}}`);
-                                }
-
-                                console.log(`Uploaded to ${url}`);
                                 resolve({
                                     file: file,
                                     url: url.trim(),
                                 });
                             })
-                            .catch(() => reject(`Failed to upload {${file}}`));
-                    });
+                            .catch((err) => {
+                                return reject(`Failed to upload {${file}} : ${err}`);
+                            });
+
+                        return;
+                    } else {
+                        readFile(file, (err, buffer) => {
+                            const form = new FormData();
+
+                            form.append('file', buffer, {
+                                name: name,
+                                filename: name,
+                            });
+
+                            fetch(IMG_ENDPOINT, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': `image/${extname(file)}`,
+                                },
+                                body: form,
+                            })
+                                .then((res) => res.text())
+                                .then((url) => {
+                                    if (!url.startsWith('http')) {
+                                        return reject(`Failed to upload {${file}} : ${url}`);
+                                    }
+
+                                    console.log(`Uploaded to ${url}`);
+                                    resolve({
+                                        file: file,
+                                        url: url.trim(),
+                                    });
+                                })
+                                .catch(() => reject(`Failed to upload {${file}}`));
+                        });
+                    }
                 }),
         );
 
