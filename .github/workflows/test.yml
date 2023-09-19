@@ -1,0 +1,42 @@
+name: CI/CD - TEST
+
+on:
+    pull_request:
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    actions: write
+    checks: write
+    pull-requests: write
+    discussions: write
+    issues: write
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    build-linux:
+        runs-on: [ubuntu-latest]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Upload Images
+              uses: ./
+              with:
+                  path: './gumball_test.png'
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  title: 'Meow 🙀'
+                  annotationLevel: 'failure'
+
+            - name: Upload Images 2
+              uses: ./
+              with:
+                  path: './pics/**'
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  title: 'Meow 2 🙀'
+                  annotationLevel: 'info'
